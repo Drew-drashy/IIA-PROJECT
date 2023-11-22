@@ -11,6 +11,25 @@ const db = mysql.createConnection({
     password: "@Shlok1234",
     database: "global_schema",
 });
+const db1 = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "@Shlok1234",
+    database: "warehouse1",
+});
+const db2 = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "@Shlok1234",
+    database: "warehouse2",
+});
+
+const db3 = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "@Shlok1234",
+    database: "warehouse3",
+});
 
 db.connect(function (err) {
     if (err) throw err;
@@ -117,11 +136,20 @@ app.get('/cust_anal', async (req, res) => {
 
 app.get('/date_anal', async (req, res) => {
     const sql = `
-    SELECT CONCAT(Month, ' ', Year) AS TimePeriod, COUNT(*) AS eventCount
-    FROM Event_Fact
-    INNER JOIN date_dim ON Event_Fact.Time_ID = date_dim.Time_ID
-    GROUP BY TimePeriod
-    ORDER BY Year, MONTH(FIELD(Month, 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'))
+    SELECT
+    SUBSTRING(date_dim.Month, 1, 3) AS ShortMonth,
+    date_dim.Year,
+    SUM(Sales_Fact.Quantity) AS MonthlySales
+FROM
+    Sales_Fact
+JOIN
+    date_dim ON Sales_Fact.DateID = date_dim.Time_ID
+GROUP BY
+    date_dim.Year,
+    date_dim.Month
+ORDER BY
+    date_dim.Year,
+    date_dim.Month
   `;
     db.query(sql, (err, data) => {
         if (err) {
@@ -181,7 +209,107 @@ app.get('/category_anal', async (req, res) => {
     });
 });
 
+app.get('/yearly_anal', async (req, res) => {
+    const sql = `
+    SELECT
+    date_dim.Year,
+    SUM(Sales_Fact.Quantity) AS YearlySales
+FROM
+    Sales_Fact
+JOIN
+    date_dim ON Sales_Fact.DateID = date_dim.Time_ID
+GROUP BY
+    date_dim.Year
+ORDER BY
+    date_dim.Year;
+  `;
+    db.query(sql, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        return res.json(data);
+    });
+});
 
+
+app.get('/w1_anal', async (req, res) => {
+    
+        const sql= `
+        SELECT
+                SUBSTRING(time.Month, 1, 3) AS ShortMonth,
+                time.Year,
+                SUM(Orders.Quantity) AS MonthlySales
+            FROM
+                Orders
+            JOIN
+                time ON Orders.TimeID = time.TimeID
+            GROUP BY
+                time.Year,
+                time.Month
+            ORDER BY
+                time.Year,
+                time.Month;`;
+        db1.query(sql, (err, data) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
+            return res.json(data);
+        });
+ });
+
+ app.get('/w2_anal', async (req, res) => {
+    
+    const sql= `
+    SELECT
+            SUBSTRING(time.Month, 1, 3) AS ShortMonth,
+            time.Year,
+            SUM(Orders.Qty) AS MonthlySales
+        FROM
+            Orders
+        JOIN
+            time ON Orders.TimeID = time.Time_ID
+        GROUP BY
+            time.Year,
+            time.Month
+        ORDER BY
+            time.Year,
+            time.Month;`;
+    db2.query(sql, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        return res.json(data);
+    });
+});
+
+app.get('/w3_anal', async (req, res) => {
+    
+    const sql= `
+    SELECT
+            SUBSTRING(time.Month, 1, 3) AS ShortMonth,
+            time.Year,
+            SUM(Orders.Quantity) AS MonthlySales
+        FROM
+            Orders
+        JOIN
+            time ON Orders.DateID = time.ID
+        GROUP BY
+            time.Year,
+            time.Month
+        ORDER BY
+            time.Year,
+            time.Month;`;
+    db3.query(sql, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        return res.json(data);
+    });
+});
 
 
 

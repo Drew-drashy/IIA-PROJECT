@@ -2,12 +2,13 @@ import  { useState, useEffect } from 'react';
 import axios from 'axios';
 import Plot from 'react-plotly.js';
 
-const DateAnalysis = () => {
+
+const Warehouse1 = () => {
   const [salesMonthlyData, setSalesMonthlyData] = useState([]);
 
   useEffect(() => {
     // Fetch data from your server or API
-    axios.get('http://localhost:8081/date_anal')
+    axios.get('http://localhost:8081/w1_anal')
       .then(response => {
         setSalesMonthlyData(response.data);
       })
@@ -18,7 +19,7 @@ const DateAnalysis = () => {
 
   return (
     <div className='mb-[50px]'>
-      <h2>Sales Monthly Analysis</h2>
+      <div className='text-4xl'>Warehouse 1 Sales Analysis</div>
       <Plot
         data={[
           {
@@ -40,4 +41,4 @@ const DateAnalysis = () => {
   );
 };
 
-export default DateAnalysis;
+export default Warehouse1;

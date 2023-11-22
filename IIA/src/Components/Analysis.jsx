@@ -4,6 +4,7 @@ import DateAnalysis from "./DateAnalysis"
 import ProductAnalysis from "./ProductAnalysis"
 import SalesAnalysis from "./SalesAnalysis."
 import StockAnalysis from "./StockAnalysis"
+import YearlyAnalysis from "./YearlyAnalysis"
 function Analysis () {
   return (
     <div>
@@ -11,9 +12,11 @@ function Analysis () {
       <CustomerAnalysis/>
       <StockAnalysis/>
       <DateAnalysis/>
+      <YearlyAnalysis/>
       <ProductAnalysis/>
       <SalesAnalysis/>
       <CategoryAnalysis/>
+      
     </div>
   )
 }

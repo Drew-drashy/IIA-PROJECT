@@ -58,7 +58,7 @@ const ProductQuantityAnalysis = () => {
   }, []);
 
   return (
-    <div>
+    <div className='mb-[50px]'>
       <h2>Product Quantity Analysis</h2>
       <Plot
         data={[
