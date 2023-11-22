@@ -1,0 +1,49 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function Sales() {
+  const [sales_Data, setsales_Data] = useState([]);
+
+  useEffect(() => {
+    // Fetch data from your Node.js server
+    axios.get('http://localhost:8081/sales_data')
+      .then(response => {
+        setsales_Data(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
+  return (
+    <div className='mt-[50px] bg-pink w-[50%] mx-[200px] content-center'>
+      <h1 className='font-bold mb-[40px] ml-[50px]'>Sales Data</h1>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>ProductID</th>
+            <th>CustomerID</th>
+            <th>DateID</th>
+            <th>Quantity</th>
+            
+            {/* Add more table headers based on your API response */}
+          </tr>
+        </thead>
+        <tbody>
+          {sales_Data.map(sales => (
+            <tr key={sales.ProductID}>
+              <td>{sales.ProductID}</td>
+              <td>{sales.CustomerID}</td>
+              <td>{sales.DateID}</td>
+              <td>{sales.Quantity}</td>
+              
+              {/* Add more table cells based on your API response */}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default Sales;
