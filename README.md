@@ -80,10 +80,6 @@ The ETL process ensures data is clean, structured, and ready for analysis.
 ### **4️⃣ Start the React Frontend**
 - Run the frontend application for **data visualization**  
 
----
-
-## **📸 Screenshots**
-_(Add a screenshot of the dashboard once implemented)_
 
 ---
 
